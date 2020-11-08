@@ -7,7 +7,7 @@ module.exports = ({ max, time }) => {
             debug('Blocking request.');
             return res.sendStatus(500);
         }
-        else if (++reqs < max) {
+        else if (++reqs <= max) {
             debug('Passing request.');
             return next();
         } else {
