@@ -1,24 +1,25 @@
 const debug = require('debug')('server:limit');
 
-module.exports = ({ max, time }) => {
+module.exports = ({ requestsToPass, minutesToBlock }) => {
     let reqs = 0, blocked = false;
     return (req, res, next) => {
         if (blocked) {
             debug('Blocking request.');
-            return res.sendStatus(500);
+            return res.sendStatus(503);
         }
-        else if (++reqs <= max) {
-            debug(`Passing request #${reqs}.`);
+        else if (++reqs <= requestsToPass) {
+            debug(`Passing request ${reqs}/${requestsToPass}.`);
             return next();
-        } else {
+        }
+        else {
             reqs = 0;
             blocked = true;
-            debug('Starting to block requests.');
+            debug(`Blocking requests for the next ${minutesToBlock === 1 ? 'minute' : `${minutesToBlock} minutes`}.`);
             setTimeout(() => {
+                debug('Finished blocking requests.');
                 blocked = false;
-                debug('Starting to pass requests.');
-            }, 10000 * time);
-            return res.sendStatus(500);
+            }, 60000 * minutesToBlock);
+            return res.sendStatus(503);
         }
     };
 };

@@ -13,8 +13,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(limit({
-    max: 5, // amount
-    time: 1 // minout
+    requestsToPass: 5,
+    minutesToBlock: 0.25,
 }));
 
 app.get('/test', (req, res) => {
