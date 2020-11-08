@@ -1,6 +1,6 @@
-module.exports = function ({ max, time }) {
+module.exports = ({ max, time }) => {
     let reqs = 0, blocked = false;
-    return function (req, res, next) {
+    return (req, res, next) => {
         if (blocked) {
             return res.sendStatus(500);
         }
