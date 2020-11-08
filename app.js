@@ -1,28 +1,10 @@
-var path = require('path');
-var logger = require('morgan');
-var express = require('express');
-var cookieParser = require('cookie-parser');
+const path = require('path');
+const logger = require('morgan');
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const limit = require('./routers/limit');
 
-const limit = function ({ max, time }) {
-    let reqs = 0, blocked = false;
-    return function (req, res, next) {
-        if (blocked) {
-            return res.sendStatus(500);
-        }
-        else if (++reqs < max) {
-            return next();
-        } else {
-            reqs = 0;
-            blocked = true;
-            setTimeout(function () {
-                blocked = false;
-            }, 10000 * time);
-            return res.sendStatus(500);
-        }
-    };
-}
-
-var app = express();
+const app = express();
 
 app.use(logger('dev'));
 app.use(cookieParser());
