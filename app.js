@@ -2,7 +2,7 @@ const path = require('path');
 const logger = require('morgan');
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const limit = require('./routers/limit');
+const limit = require('./middleware/limit');
 
 const app = express();
 
